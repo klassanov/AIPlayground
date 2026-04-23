@@ -39,7 +39,10 @@ var promptExecutionSettings = new OpenAIPromptExecutionSettings()
     ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Always answer as a pirate.",
     
     //Pretty different response eeach time
-    Temperature = 0.9
+    Temperature = 0.9,
+
+    //Max token in the response
+    MaxTokens = 100
 };
 
 
