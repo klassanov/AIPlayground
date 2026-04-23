@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using OpenAI.Chat;
-using System;
 
 // Load configuration
 var configuration = new ConfigurationBuilder()
