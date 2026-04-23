@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
 using OpenAI.Chat;
 
 // Load configuration
@@ -27,9 +28,20 @@ builder.AddAzureOpenAIChatCompletion(
 var kernel = builder.Build();
 
 
-
 //This works regardless of the model
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+
+
+//Specific to Open AI. Each model has a different class for settings. WIll not work with other models.
+var promptExecutionSettings = new OpenAIPromptExecutionSettings()
+{
+    //System prompt
+    ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Always answer as a pirate.",
+    
+    //Pretty different response eeach time
+    Temperature = 0.9
+};
+
 
 while (true)
 {
@@ -44,7 +56,7 @@ while (true)
     }
 
     Console.ForegroundColor = ConsoleColor.Cyan;
-    var chatResponse = await chatCompletionService.GetChatMessageContentAsync(userPrompt);
+    var chatResponse = await chatCompletionService.GetChatMessageContentAsync(userPrompt, promptExecutionSettings);
     Console.WriteLine(chatResponse.Content);
 
     if(chatResponse.InnerContent is ChatCompletion)
@@ -55,8 +67,11 @@ while (true)
         Console.WriteLine($"ModelId: {chatResponse.ModelId}");
         Console.WriteLine($"Output token count: {details!.Usage.OutputTokenCount}");
         Console.WriteLine($"Input token count: {details!.Usage.InputTokenCount}");
+        Console.WriteLine($"Total token count: {details!.Usage.TotalTokenCount}");
     }
 
     Console.WriteLine();
 }
+
+Console.ForegroundColor = ConsoleColor.White;
 
