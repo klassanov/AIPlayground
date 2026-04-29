@@ -39,10 +39,26 @@ var promptExecutionSettings = new OpenAIPromptExecutionSettings()
     Temperature = 0.9,
 
     //Max token in the response => limit the cost
-    MaxTokens = 100
+    MaxTokens = 200
 };
 
 var chatHistory = new ChatHistory();
+
+
+//Try different reducer strategies
+IChatHistoryReducer reducer;
+//targetCount: the count of messages that will remain in chatHistory after reduction of chat history is applied
+//manual trigger
+//var reducer = new ChatHistoryTruncationReducer(targetCount: 2);
+
+//We are using the same model for reduction, but any model can be used here
+//manual trigger
+//tresholdCount: an optional number of messages beyond the 'targetCount' that must be present in order to trigger reduction
+//after reducing we have targetCount + 1 summary message which is the last one in the reducedChat history collection
+reducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
+
+//custom implementation of IChatHistoryReducer is also possible
+
 
 while (true)
 {
@@ -59,14 +75,14 @@ while (true)
     chatHistory.AddUserMessage(userPrompt);
 
     Console.ForegroundColor = ConsoleColor.Cyan;
-    
+
     //Stateliess
     //var chatResponse = await chatCompletionService.GetChatMessageContentAsync(userPrompt, promptExecutionSettings);
-    
+
     //Send chat history, so there is no loss of context.
     var chatResponse = await chatCompletionService.GetChatMessageContentAsync(chatHistory, promptExecutionSettings);
 
-    if (chatResponse !=null)
+    if (chatResponse != null)
     {
         chatHistory.AddAssistantMessage(chatResponse.Content ?? string.Empty);
         Console.WriteLine(chatResponse.Content);
@@ -85,11 +101,18 @@ while (true)
     else
     {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine("No response from the model."); 
+        Console.WriteLine("No response from the model.");
         Console.ForegroundColor = ConsoleColor.White;
     }
 
     Console.WriteLine();
+
+    var reducedChatHistory = await reducer.ReduceAsync(chatHistory);
+    //returns null if no reduction has happened
+    if (reducedChatHistory is not null)
+    {
+        chatHistory = new ChatHistory(reducedChatHistory);
+    }
 }
 
 Console.ForegroundColor = ConsoleColor.White;
