@@ -1,9 +1,8 @@
-﻿using AIPlayground.Console.Config;
+﻿using AIPlayground.Console.AIAdapters;
+using AIPlayground.Console.Config;
 using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
-using Microsoft.SemanticKernel.Connectors.OpenAI;
-using OpenAI.Chat;
 
 // Load configuration
 var configuration = new ConfigurationBuilder()
@@ -29,6 +28,12 @@ var kernel = builder.Build();
 //This works regardless of the model
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
+AIAdapter adapter;
+//adapter = new SimpleAIAdapter(chatCompletionService);
+adapter = new ResponseStreamingIAAdapter(chatCompletionService);
+await adapter.StartPrompt();
+
+/*
 //Specific to Open AI. Each model has a different class for settings. WIll not work with other models.
 var promptExecutionSettings = new OpenAIPromptExecutionSettings()
 {
@@ -116,4 +121,5 @@ while (true)
 }
 
 Console.ForegroundColor = ConsoleColor.White;
+*/
 
