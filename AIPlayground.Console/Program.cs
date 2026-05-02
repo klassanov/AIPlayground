@@ -18,10 +18,14 @@ var settings = new SemanticKernelSettings();
 configuration.GetSection("SemanticKernel").Bind(settings);
 
 var builder = Kernel.CreateBuilder();
-builder.AddAzureOpenAIChatCompletion(
-    deploymentName: settings.AzureOpenAI.DeploymentName,
-    endpoint: settings.AzureOpenAI.Endpoint,
-    apiKey: settings.AzureOpenAI.ApiKey);
+
+//Custom config wrapper
+builder.ConfigureModel(ModelType.OPENAI, settings);
+
+//builder.AddAzureOpenAIChatCompletion(
+//    deploymentName: settings.AzureOpenAI.DeploymentName,
+//    endpoint: settings.AzureOpenAI.Endpoint,
+//    apiKey: settings.AzureOpenAI.ApiKey);
 
 var kernel = builder.Build();
 
@@ -29,8 +33,10 @@ var kernel = builder.Build();
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
 AIAdapter adapter;
+
 //adapter = new SimpleAIAdapter(chatCompletionService);
 adapter = new ResponseStreamingIAAdapter(chatCompletionService);
+
 await adapter.StartPrompt();
 
 /*
