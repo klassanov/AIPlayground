@@ -1,5 +1,6 @@
 ﻿using AIPlayground.Console.AIAdapters;
 using AIPlayground.Console.Config;
+using AIPlayground.Console.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
@@ -31,9 +32,9 @@ var kernel = builder.Build();
 
 //This works regardless of the model
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+chatCompletionService.PrintAttributes();
 
 AIAdapter adapter;
-
 //adapter = new SimpleAIAdapter(chatCompletionService);
 adapter = new ResponseStreamingIAAdapter(chatCompletionService);
 
