@@ -21,7 +21,7 @@ configuration.GetSection("SemanticKernel").Bind(settings);
 var builder = Kernel.CreateBuilder();
 
 //Custom config wrapper
-builder.ConfigureModel(ModelType.OPENAI, settings);
+builder.ConfigureModel(ModelType.AZURE_OPENAI, settings);
 
 //builder.AddAzureOpenAIChatCompletion(
 //    deploymentName: settings.AzureOpenAI.DeploymentName,

@@ -8,7 +8,7 @@ namespace AIPlayground.Console.Extensions
         {
             internal void PrintAttributes()
             {
-                System.Console.WriteLine($"Printing Attributes of {chatCompletionService.GetType().Name}");
+                System.Console.WriteLine($"Printing Attributes of {chatCompletionService.GetType().FullName}");
 
                 foreach (var item in chatCompletionService.Attributes)
                 {
