@@ -18,20 +18,22 @@ var configuration = new ConfigurationBuilder()
 var settings = new SemanticKernelSettings();
 configuration.GetSection("SemanticKernel").Bind(settings);
 
-var builder = Kernel.CreateBuilder();
+var semanticKernelBuilder = Kernel.CreateBuilder();
 
 //Custom config wrapper
-builder.ConfigureModel(ModelType.AZURE_OPENAI, settings);
+//builder.ConfigureModel(ModelType.AZURE_OPENAI, settings);
+semanticKernelBuilder.ConfigureModels(settings);
+
 
 //builder.AddAzureOpenAIChatCompletion(
 //    deploymentName: settings.AzureOpenAI.DeploymentName,
 //    endpoint: settings.AzureOpenAI.Endpoint,
 //    apiKey: settings.AzureOpenAI.ApiKey);
 
-var kernel = builder.Build();
+var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelType.OPENAI.ToString());
 chatCompletionService.PrintAttributes();
 
 AIAdapter adapter;

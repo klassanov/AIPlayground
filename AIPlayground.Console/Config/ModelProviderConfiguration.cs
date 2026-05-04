@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.SemanticKernel;
+﻿using Microsoft.SemanticKernel;
 
 namespace AIPlayground.Console.Config
 {
@@ -14,25 +10,66 @@ namespace AIPlayground.Console.Config
 
     internal static class ModelProviderConfiguration
     {
-        public static void ConfigureModel(this IKernelBuilder builder, ModelType modelType, SemanticKernelSettings settings)
+        extension(IKernelBuilder builder)
         {
-            switch (modelType)
+            internal void ConfigureModel(ModelType modelType, SemanticKernelSettings settings)
             {
-                case ModelType.AZURE_OPENAI:
-                    builder.AddAzureOpenAIChatCompletion(
-                        deploymentName: settings.AzureOpenAI.DeploymentName,
-                        endpoint: settings.AzureOpenAI.Endpoint,
-                        apiKey: settings.AzureOpenAI.ApiKey);
+                switch (modelType)
+                {
+                    case ModelType.AZURE_OPENAI:
+                        builder.AddAzureOpenAIChatCompletion(
+                            deploymentName: settings.AzureOpenAI.DeploymentName,
+                            endpoint: settings.AzureOpenAI.Endpoint,
+                            apiKey: settings.AzureOpenAI.ApiKey);
 
-                    break;
+                        break;
 
-                case ModelType.OPENAI:
-                    builder.AddOpenAIChatCompletion(
-                        modelId:settings.OpenAI.ModelId,
-                        apiKey: settings.OpenAI.ApiKey);
+                    case ModelType.OPENAI:
+                        builder.AddOpenAIChatCompletion(
+                            modelId: settings.OpenAI.ModelId,
+                            apiKey: settings.OpenAI.ApiKey);
 
-                    break;
+                        break;
+                }
+            }
+
+            internal void ConfigureModels(SemanticKernelSettings settings)
+            {
+                builder.AddAzureOpenAIChatCompletion(
+                            deploymentName: settings.AzureOpenAI.DeploymentName,
+                            endpoint: settings.AzureOpenAI.Endpoint,
+                            apiKey: settings.AzureOpenAI.ApiKey, 
+                            serviceId: ModelType.AZURE_OPENAI.ToString());
+
+
+                builder.AddOpenAIChatCompletion(
+                            modelId: settings.OpenAI.ModelId,
+                            apiKey: settings.OpenAI.ApiKey,
+                            serviceId: ModelType.OPENAI.ToString());
             }
         }
+
+        //public static void ConfigureModel(this IKernelBuilder builder, ModelType modelType, SemanticKernelSettings settings)
+        //{
+        //    switch (modelType)
+        //    {
+        //        case ModelType.AZURE_OPENAI:
+        //            builder.AddAzureOpenAIChatCompletion(
+        //                deploymentName: settings.AzureOpenAI.DeploymentName,
+        //                endpoint: settings.AzureOpenAI.Endpoint,
+        //                apiKey: settings.AzureOpenAI.ApiKey);
+
+        //            break;
+
+        //        case ModelType.OPENAI:
+        //            builder.AddOpenAIChatCompletion(
+        //                modelId:settings.OpenAI.ModelId,
+        //                apiKey: settings.OpenAI.ApiKey);
+
+        //            break;
+        //    }
+        //}
+
+
     }
 }
