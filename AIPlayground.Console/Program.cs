@@ -33,7 +33,7 @@ semanticKernelBuilder.ConfigureModels(settings);
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelType.OPENAI.ToString());
+var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelType.AZURE_AI_INFERENCE.ToString());
 chatCompletionService.PrintAttributes();
 
 AIAdapter adapter;

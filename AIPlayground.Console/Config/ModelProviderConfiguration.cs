@@ -5,33 +5,34 @@ namespace AIPlayground.Console.Config
     enum ModelType
     {
         AZURE_OPENAI,
-        OPENAI
+        OPENAI,
+        AZURE_AI_INFERENCE
     }
 
     internal static class ModelProviderConfiguration
     {
         extension(IKernelBuilder builder)
         {
-            internal void ConfigureModel(ModelType modelType, SemanticKernelSettings settings)
-            {
-                switch (modelType)
-                {
-                    case ModelType.AZURE_OPENAI:
-                        builder.AddAzureOpenAIChatCompletion(
-                            deploymentName: settings.AzureOpenAI.DeploymentName,
-                            endpoint: settings.AzureOpenAI.Endpoint,
-                            apiKey: settings.AzureOpenAI.ApiKey);
+            //internal void ConfigureModel(ModelType modelType, SemanticKernelSettings settings)
+            //{
+            //    switch (modelType)
+            //    {
+            //        case ModelType.AZURE_OPENAI:
+            //            builder.AddAzureOpenAIChatCompletion(
+            //                deploymentName: settings.AzureOpenAI.DeploymentName,
+            //                endpoint: settings.AzureOpenAI.Endpoint,
+            //                apiKey: settings.AzureOpenAI.ApiKey);
 
-                        break;
+            //            break;
 
-                    case ModelType.OPENAI:
-                        builder.AddOpenAIChatCompletion(
-                            modelId: settings.OpenAI.ModelId,
-                            apiKey: settings.OpenAI.ApiKey);
+            //        case ModelType.OPENAI:
+            //            builder.AddOpenAIChatCompletion(
+            //                modelId: settings.OpenAI.ModelId,
+            //                apiKey: settings.OpenAI.ApiKey);
 
-                        break;
-                }
-            }
+            //            break;
+            //    }
+            //}
 
             internal void ConfigureModels(SemanticKernelSettings settings)
             {
@@ -46,6 +47,12 @@ namespace AIPlayground.Console.Config
                             modelId: settings.OpenAI.ModelId,
                             apiKey: settings.OpenAI.ApiKey,
                             serviceId: ModelType.OPENAI.ToString());
+
+                builder.AddAzureAIInferenceChatCompletion(
+                            modelId: settings.AzureAIInference.ModelId,
+                            endpoint: new Uri(settings.AzureAIInference.Endpoint),
+                            apiKey: settings.AzureAIInference.ApiKey,
+                            serviceId: ModelType.AZURE_AI_INFERENCE.ToString());
             }
         }
 

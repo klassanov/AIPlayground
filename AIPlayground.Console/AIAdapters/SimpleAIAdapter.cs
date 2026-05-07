@@ -17,17 +17,17 @@ internal class SimpleAIAdapter : AIAdapter
         this.chatHistoryReducer = new ChatHistoryTruncationReducer(targetCount: 2);
         this.chatHistory = new ChatHistory();
 
-        this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
-        {
-            //System prompt
-            ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Answer as a scientist.",
+        //this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
+        //{
+        //    //System prompt
+        //    ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Answer as a scientist.",
 
-            //Pretty different response eeach time
-            Temperature = 0.9,
+        //    //Pretty different response eeach time
+        //    Temperature = 0.9,
 
-            //Max token in the response => limit the cost
-            MaxTokens = 200
-        };
+        //    //Max token in the response => limit the cost
+        //    MaxTokens = 200
+        //};
     }
 
     public async Task StartPrompt()
