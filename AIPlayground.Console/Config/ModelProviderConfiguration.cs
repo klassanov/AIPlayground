@@ -15,31 +15,10 @@ namespace AIPlayground.Console.Config
     {
         extension(IKernelBuilder builder)
         {
-            //internal void ConfigureModel(ModelType modelType, SemanticKernelSettings settings)
-            //{
-            //    switch (modelType)
-            //    {
-            //        case ModelType.AZURE_OPENAI:
-            //            builder.AddAzureOpenAIChatCompletion(
-            //                deploymentName: settings.AzureOpenAI.DeploymentName,
-            //                endpoint: settings.AzureOpenAI.Endpoint,
-            //                apiKey: settings.AzureOpenAI.ApiKey);
-
-            //            break;
-
-            //        case ModelType.OPENAI:
-            //            builder.AddOpenAIChatCompletion(
-            //                modelId: settings.OpenAI.ModelId,
-            //                apiKey: settings.OpenAI.ApiKey);
-
-            //            break;
-            //    }
-            //}
-
             internal void ConfigureModels(SemanticKernelSettings settings)
             {
                 builder.AddAzureOpenAIChatCompletion(
-                            deploymentName: settings.AzureOpenAI.DeploymentName,
+                            deploymentName: settings.AzureOpenAI.ModelId,
                             endpoint: settings.AzureOpenAI.Endpoint,
                             apiKey: settings.AzureOpenAI.ApiKey, 
                             serviceId: ModelHost.AZURE_OPENAI.ToString());
@@ -68,28 +47,5 @@ namespace AIPlayground.Console.Config
                            serviceId: ModelHost.HUGGING_FACE.ToString());
             }
         }
-
-        //public static void ConfigureModel(this IKernelBuilder builder, ModelType modelType, SemanticKernelSettings settings)
-        //{
-        //    switch (modelType)
-        //    {
-        //        case ModelType.AZURE_OPENAI:
-        //            builder.AddAzureOpenAIChatCompletion(
-        //                deploymentName: settings.AzureOpenAI.DeploymentName,
-        //                endpoint: settings.AzureOpenAI.Endpoint,
-        //                apiKey: settings.AzureOpenAI.ApiKey);
-
-        //            break;
-
-        //        case ModelType.OPENAI:
-        //            builder.AddOpenAIChatCompletion(
-        //                modelId:settings.OpenAI.ModelId,
-        //                apiKey: settings.OpenAI.ApiKey);
-
-        //            break;
-        //    }
-        //}
-
-
     }
 }

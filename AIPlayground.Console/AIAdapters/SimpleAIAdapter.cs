@@ -7,7 +7,7 @@ namespace AIPlayground.Console.AIAdapters;
 internal class SimpleAIAdapter : AIAdapter
 {
     private readonly IChatCompletionService chatCompletionService;
-    private readonly OpenAIPromptExecutionSettings promptExecutionSettings;
+    private readonly OpenAIPromptExecutionSettings? promptExecutionSettings;
     private readonly IChatHistoryReducer chatHistoryReducer;
     private ChatHistory chatHistory;
 
