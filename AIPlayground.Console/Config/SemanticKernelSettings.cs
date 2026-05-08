@@ -6,6 +6,7 @@ public class SemanticKernelSettings
     public OpenAISettings OpenAI { get; set; } = new();
     public AzureAIInferenceSettings AzureAIInference { get; set; } = new();
     public GithubSettings GitHub { get; set; } = new();
+    public HuggingFaceSettings HuggingFace { get; set; } = new();
 }
 
 public class AzureOpenAISettings
@@ -29,6 +30,13 @@ public class AzureAIInferenceSettings
 }
 
 public class GithubSettings
+{
+    public string ModelId { get; set; } = string.Empty;
+    public string Endpoint { get; set; } = string.Empty;
+    public string ApiKey { get; set; } = string.Empty;
+}
+
+public class HuggingFaceSettings
 {
     public string ModelId { get; set; } = string.Empty;
     public string Endpoint { get; set; } = string.Empty;

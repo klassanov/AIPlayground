@@ -19,6 +19,7 @@ namespace AIPlayground.Console.AIAdapters
             this.chatHistoryReducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
             this.chatHistory = new ChatHistory();
 
+            //TODO: Specific to each model that is used => needs to be changed
             this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
             {
                 //System prompt

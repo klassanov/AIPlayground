@@ -7,7 +7,8 @@ namespace AIPlayground.Console.Config
         AZURE_OPENAI,
         OPENAI,
         AZURE_AI_INFERENCE,
-        GITHUB
+        GITHUB,
+        HUGGING_FACE
     }
 
     internal static class ModelProviderConfiguration
@@ -59,6 +60,12 @@ namespace AIPlayground.Console.Config
                            endpoint: new Uri(settings.GitHub.Endpoint),
                            apiKey: settings.GitHub.ApiKey,
                            serviceId: ModelHost.GITHUB.ToString());
+
+                builder.AddHuggingFaceChatCompletion(
+                           model: settings.HuggingFace.ModelId,
+                           endpoint: new Uri(settings.HuggingFace.Endpoint),
+                           apiKey: settings.HuggingFace.ApiKey,
+                           serviceId: ModelHost.HUGGING_FACE.ToString());
             }
         }
 

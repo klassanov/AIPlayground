@@ -33,7 +33,7 @@ semanticKernelBuilder.ConfigureModels(settings);
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelHost.GITHUB.ToString());
+var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelHost.HUGGING_FACE.ToString());
 chatCompletionService.PrintAttributes();
 
 AIAdapter adapter;
