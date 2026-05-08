@@ -2,11 +2,12 @@
 
 namespace AIPlayground.Console.Config
 {
-    enum ModelType
+    enum ModelHost
     {
         AZURE_OPENAI,
         OPENAI,
-        AZURE_AI_INFERENCE
+        AZURE_AI_INFERENCE,
+        GITHUB
     }
 
     internal static class ModelProviderConfiguration
@@ -40,19 +41,24 @@ namespace AIPlayground.Console.Config
                             deploymentName: settings.AzureOpenAI.DeploymentName,
                             endpoint: settings.AzureOpenAI.Endpoint,
                             apiKey: settings.AzureOpenAI.ApiKey, 
-                            serviceId: ModelType.AZURE_OPENAI.ToString());
-
+                            serviceId: ModelHost.AZURE_OPENAI.ToString());
 
                 builder.AddOpenAIChatCompletion(
                             modelId: settings.OpenAI.ModelId,
                             apiKey: settings.OpenAI.ApiKey,
-                            serviceId: ModelType.OPENAI.ToString());
+                            serviceId: ModelHost.OPENAI.ToString());
 
                 builder.AddAzureAIInferenceChatCompletion(
                             modelId: settings.AzureAIInference.ModelId,
                             endpoint: new Uri(settings.AzureAIInference.Endpoint),
                             apiKey: settings.AzureAIInference.ApiKey,
-                            serviceId: ModelType.AZURE_AI_INFERENCE.ToString());
+                            serviceId: ModelHost.AZURE_AI_INFERENCE.ToString());
+
+                builder.AddAzureAIInferenceChatCompletion(
+                           modelId: settings.GitHub.ModelId,
+                           endpoint: new Uri(settings.GitHub.Endpoint),
+                           apiKey: settings.GitHub.ApiKey,
+                           serviceId: ModelHost.GITHUB.ToString());
             }
         }
 
