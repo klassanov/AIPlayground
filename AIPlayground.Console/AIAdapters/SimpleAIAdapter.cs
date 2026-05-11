@@ -4,7 +4,7 @@ using OpenAI.Chat;
 
 namespace AIPlayground.Console.AIAdapters;
 
-internal class SimpleAIAdapter : AIAdapter
+internal class SimpleAIAdapter : IAIAdapter
 {
     private readonly IChatCompletionService chatCompletionService;
     private readonly OpenAIPromptExecutionSettings? promptExecutionSettings;

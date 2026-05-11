@@ -1,36 +1,37 @@
 ﻿using System.Text;
+using AIPlayground.Console.AIAdapters;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using OpenAI.Chat;
 
-namespace AIPlayground.Console.AIAdapters
+namespace AIPlayground.Console.AIHostingAdapters
 {
-    internal class ResponseStreamingIAAdapter : IAIAdapter
+    internal abstract class HostingAdapter: IAIAdapter
     {
         private readonly IChatCompletionService chatCompletionService;
-        private readonly OpenAIPromptExecutionSettings promptExecutionSettings;
+        private readonly OpenAIPromptExecutionSettings? promptExecutionSettings;
         private readonly IChatHistoryReducer chatHistoryReducer;
         private ChatHistory chatHistory;
 
-        public ResponseStreamingIAAdapter(IChatCompletionService chatCompletionService)
+        public HostingAdapter(IChatCompletionService chatCompletionService)
         {
             this.chatCompletionService = chatCompletionService;
             this.chatHistoryReducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
             this.chatHistory = new ChatHistory();
 
             //TODO: Specific to each model that is used => needs to be changed
-            this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
-            {
-                //System prompt
-                ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Answer as a scientist.",
+            //this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
+            //{
+            //    //System prompt
+            //    ChatSystemPrompt = "You are a helpful assistant that provides concise and accurate answers to user questions. Answer as a scientist.",
 
-                //Pretty different response eeach time
-                Temperature = 0.9,
+            //    //Pretty different response eeach time
+            //    Temperature = 0.9,
 
-                //Max token in the response => limit the cost
-                MaxTokens = 2000
-            };
+            //    //Max token in the response => limit the cost
+            //    MaxTokens = 2000
+            //};
         }
 
         public async Task StartPrompt()

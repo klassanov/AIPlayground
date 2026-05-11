@@ -1,6 +1,6 @@
 ﻿namespace AIPlayground.Console.AIAdapters
 {
-    internal interface AIAdapter
+    internal interface IAIAdapter
     {
         Task StartPrompt();
     }
