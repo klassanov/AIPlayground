@@ -8,7 +8,8 @@ namespace AIPlayground.Console.Config
         OPENAI,
         AZURE_AI_INFERENCE,
         GITHUB,
-        HUGGING_FACE
+        HUGGING_FACE,
+        LOCAL_PHI3
     }
 
     internal static class ModelProviderConfiguration
@@ -45,6 +46,11 @@ namespace AIPlayground.Console.Config
                            endpoint: new Uri(settings.HuggingFace.Endpoint),
                            apiKey: settings.HuggingFace.ApiKey,
                            serviceId: ModelHost.HUGGING_FACE.ToString());
+
+                builder.AddOnnxRuntimeGenAIChatCompletion(
+                            modelId: settings.LocalPhi3.ModelId,
+                            modelPath: settings.LocalPhi3.ModelPath,
+                            serviceId: ModelHost.LOCAL_PHI3.ToString());
             }
         }
     }

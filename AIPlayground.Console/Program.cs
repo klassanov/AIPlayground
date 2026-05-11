@@ -32,7 +32,7 @@ semanticKernelBuilder.ConfigureModels(settings);
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelHost.GITHUB.ToString());
+var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelHost.LOCAL_PHI3.ToString());
 chatCompletionService.PrintAttributes();
 
 
