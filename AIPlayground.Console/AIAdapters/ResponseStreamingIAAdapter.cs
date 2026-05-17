@@ -9,8 +9,8 @@ namespace AIPlayground.Console.AIAdapters
 {
     internal class ResponseStreamingIAAdapter : IAIAdapter
     {
-        private readonly IChatCompletionService chatCompletionService;
-        private ChatHistory chatHistory;
+        protected IChatCompletionService chatCompletionService;
+        protected ChatHistory chatHistory;
         protected PromptExecutionSettings? promptExecutionSettings;
         protected IChatHistoryReducer chatHistoryReducer;
 
@@ -43,6 +43,10 @@ namespace AIPlayground.Console.AIAdapters
         {
             //Default reducer that works for most cases, but can be overridden for specific scenarios.
             this.chatHistoryReducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
+        }
+
+        protected virtual void DisposeChatCompletionService()
+        {
         }
 
         public virtual async Task StartPrompt()
@@ -103,6 +107,8 @@ namespace AIPlayground.Console.AIAdapters
                 }
                 System.Console.ForegroundColor = ConsoleColor.White;
             }
+
+            this.DisposeChatCompletionService();
         }
     }
 }

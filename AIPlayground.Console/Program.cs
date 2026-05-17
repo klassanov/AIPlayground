@@ -24,11 +24,13 @@ var semanticKernelBuilder = Kernel.CreateBuilder();
 //Custom config wrapper
 semanticKernelBuilder.ConfigureModels(settings);
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, GithubAdapter>();
+semanticKernelBuilder.Services.AddSingleton<IAIAdapter, LocalPHI3Adapter>();
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
 //var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
 IAIAdapter adapter = kernel.GetRequiredService<IAIAdapter>();
+
 await adapter.StartPrompt();
 
