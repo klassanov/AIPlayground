@@ -1,13 +1,11 @@
 ﻿using AIPlayground.Console.AIAdapters;
-using AIPlayground.Console.AIHostingAdapters;
 using AIPlayground.Console.Config;
-using AIPlayground.Console.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 
-// Load configuration
+// Load configuration, without using Host (this is a lightweight alternative)
 var configuration = new ConfigurationBuilder()
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json")
@@ -20,28 +18,17 @@ var configuration = new ConfigurationBuilder()
 var settings = new SemanticKernelSettings();
 configuration.GetSection("SemanticKernel").Bind(settings);
 
+//Semantic Kernel builder, used for DI of Senamntic Kernel - specific services
 var semanticKernelBuilder = Kernel.CreateBuilder();
 
 //Custom config wrapper
 semanticKernelBuilder.ConfigureModels(settings);
-
-
-//semanticKernelBuilder.Services.AddSingleton<IAIAdapter, GithubAdapter>();
-
-
+semanticKernelBuilder.Services.AddSingleton<IAIAdapter, GithubAdapter>();
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>(ModelHost.LOCAL_PHI3.ToString());
-chatCompletionService.PrintAttributes();
+//var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
-
-
-//TODO: implement visitor streaming vs simple and all different kind of adaptors per each provider
-
-IAIAdapter adapter;
-//adapter = new SimpleAIAdapter(chatCompletionService);
-adapter = new ResponseStreamingIAAdapter(chatCompletionService);
-
+IAIAdapter adapter = kernel.GetRequiredService<IAIAdapter>();
 await adapter.StartPrompt();
 

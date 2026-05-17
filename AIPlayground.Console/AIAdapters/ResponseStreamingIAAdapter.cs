@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using AIPlayground.Console.Extensions;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -9,16 +10,21 @@ namespace AIPlayground.Console.AIAdapters
     internal class ResponseStreamingIAAdapter : IAIAdapter
     {
         private readonly IChatCompletionService chatCompletionService;
-        private readonly OpenAIPromptExecutionSettings promptExecutionSettings;
-        private readonly IChatHistoryReducer chatHistoryReducer;
         private ChatHistory chatHistory;
+        protected PromptExecutionSettings? promptExecutionSettings;
+        protected IChatHistoryReducer chatHistoryReducer;
 
         public ResponseStreamingIAAdapter(IChatCompletionService chatCompletionService)
         {
+            chatCompletionService.PrintAttributes();
             this.chatCompletionService = chatCompletionService;
             this.chatHistoryReducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
             this.chatHistory = new ChatHistory();
+            InitializePromptExecutionSettings();            
+        }
 
+        protected virtual void InitializePromptExecutionSettings()
+        {
             //TODO: Specific to each model that is used => needs to be changed
             this.promptExecutionSettings = new OpenAIPromptExecutionSettings()
             {
@@ -33,7 +39,13 @@ namespace AIPlayground.Console.AIAdapters
             };
         }
 
-        public async Task StartPrompt()
+        protected virtual void InitializeChatHistoryReducer()
+        {
+            //Default reducer that works for most cases, but can be overridden for specific scenarios.
+            this.chatHistoryReducer = new ChatHistorySummarizationReducer(service: chatCompletionService, targetCount: 2, thresholdCount: 2);
+        }
+
+        public virtual async Task StartPrompt()
         {
             while (true)
             {
@@ -64,6 +76,7 @@ namespace AIPlayground.Console.AIAdapters
                     lastChatResponseChunk = chatResponseChunk;
                 }
 
+                //System.Console.ForegroundColor = ConsoleColor.White;
                 System.Console.WriteLine();
 
                 if (lastChatResponseChunk?.InnerContent is StreamingChatCompletionUpdate update)
