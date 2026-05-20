@@ -23,7 +23,7 @@ var settings = new SemanticKernelSettings();
 configuration.GetSection("SemanticKernel").Bind(settings);
 
 //Standalone instance without Kernel usage
-await UseStandaloneInstance(configuration);
+//await UseStandaloneInstance(configuration);
 
 
 //Semantic Kernel builder, used for DI of Senamntic Kernel - specific services
@@ -33,6 +33,7 @@ var semanticKernelBuilder = Kernel.CreateBuilder();
 semanticKernelBuilder.ConfigureModels(settings);
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, GithubAdapter>();
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, LocalPHI3Adapter>();
+semanticKernelBuilder.Services.AddSingleton<IAIAdapter, OllamaAdapter>();
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model

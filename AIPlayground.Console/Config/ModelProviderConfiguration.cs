@@ -10,6 +10,7 @@ namespace AIPlayground.Console.Config
         public const string GITHUB = "GITHUB";
         public const string HUGGING_FACE = "HUGGING_FACE";
         public const string LOCAL_PHI3 = "LOCAL_PHI3";
+        public const string OLLAMA = "OLLAMA";
     }
 
     internal static class ModelProviderConfiguration
@@ -51,6 +52,11 @@ namespace AIPlayground.Console.Config
                             modelId: settings.LocalPhi3.ModelId,
                             modelPath: settings.LocalPhi3.ModelPath,
                             serviceId: ModelHost.LOCAL_PHI3);
+
+                builder.AddOllamaChatCompletion(
+                            modelId: settings.Ollama.ModelId,
+                            endpoint: new Uri(settings.Ollama.Endpoint),
+                            serviceId: ModelHost.OLLAMA);
             }
         }
     }

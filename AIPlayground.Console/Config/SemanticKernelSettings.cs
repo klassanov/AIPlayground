@@ -8,6 +8,7 @@ public class SemanticKernelSettings
     public ModelProviderSettings GitHub { get; set; } = new();
     public ModelProviderSettings HuggingFace { get; set; } = new();
     public LocalModelProviderSettings LocalPhi3 { get; set; } = new();
+    public ModelProviderSettings Ollama { get; set; } = new();
 }
 
 public class ModelProviderSettings
@@ -16,7 +17,6 @@ public class ModelProviderSettings
     public string Endpoint { get; set; } = string.Empty;
     public string ApiKey { get; set; } = string.Empty;
 }
-
 
 public class LocalModelProviderSettings
 {
