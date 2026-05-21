@@ -1,4 +1,5 @@
-﻿using Microsoft.SemanticKernel;
+﻿using System.ClientModel.Primitives;
+using Microsoft.SemanticKernel;
 
 namespace AIPlayground.Console.Config
 {
@@ -11,6 +12,7 @@ namespace AIPlayground.Console.Config
         public const string HUGGING_FACE = "HUGGING_FACE";
         public const string LOCAL_PHI3 = "LOCAL_PHI3";
         public const string OLLAMA = "OLLAMA";
+        public const string LOCAL_LM_STUDIO_GEMMA = "LOCAL_LM_STUDIO_GEMMA";
     }
 
     internal static class ModelProviderConfiguration
@@ -57,6 +59,12 @@ namespace AIPlayground.Console.Config
                             modelId: settings.Ollama.ModelId,
                             endpoint: new Uri(settings.Ollama.Endpoint),
                             serviceId: ModelHost.OLLAMA);
+
+                builder.AddOpenAIChatCompletion(
+                            modelId: settings.LocalLMStudioGemma.ModelId,                            
+                            endpoint: new Uri(settings.LocalLMStudioGemma.Endpoint),
+                            apiKey:string.Empty, // LM Studio does not require
+                            serviceId: ModelHost.LOCAL_LM_STUDIO_GEMMA);
             }
         }
     }

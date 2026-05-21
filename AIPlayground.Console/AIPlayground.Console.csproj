@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.HuggingFace" Version="1.75.0-preview" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Ollama" Version="1.76.0-alpha" />
     <PackageReference Include="Microsoft.SemanticKernel.Connectors.Onnx" Version="1.76.0-alpha" />
+    <PackageReference Include="Microsoft.SemanticKernel.Connectors.OpenAI" Version="1.76.0" />
   </ItemGroup>
 
   <ItemGroup>

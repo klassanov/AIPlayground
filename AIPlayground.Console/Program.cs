@@ -34,6 +34,9 @@ semanticKernelBuilder.ConfigureModels(settings);
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, GithubAdapter>();
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, LocalPHI3Adapter>();
 semanticKernelBuilder.Services.AddSingleton<IAIAdapter, OllamaAdapter>();
+semanticKernelBuilder.Services.AddSingleton<IAIAdapter, LocalLMStudioGemmaAdapter>();
+
+
 var kernel = semanticKernelBuilder.Build();
 
 //This works regardless of the model

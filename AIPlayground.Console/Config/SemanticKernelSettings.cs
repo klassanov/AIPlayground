@@ -9,6 +9,7 @@ public class SemanticKernelSettings
     public ModelProviderSettings HuggingFace { get; set; } = new();
     public LocalModelProviderSettings LocalPhi3 { get; set; } = new();
     public ModelProviderSettings Ollama { get; set; } = new();
+    public ModelProviderSettings LocalLMStudioGemma { get; set; } = new();
 }
 
 public class ModelProviderSettings
