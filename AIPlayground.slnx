@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="AIMultimodal.Console/AIMultimodal.Console.csproj" Id="26bc6004-3a00-4ef3-80d1-84d03c1077aa" />
   <Project Path="AIPlayground.Console/AIPlayground.Console.csproj" />
+  <Project Path="AIPlugins/AIPlugins.csproj" Id="bb230a4e-fe2a-4a83-8cfa-5811ace64d3f" />
 </Solution>
