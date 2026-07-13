@@ -1,5 +1,9 @@
 <Solution>
+  <Folder Name="/SolutionItems/">
+    <File Path=".mcp.json" />
+  </Folder>
   <Project Path="AIMultimodal.Console/AIMultimodal.Console.csproj" Id="26bc6004-3a00-4ef3-80d1-84d03c1077aa" />
   <Project Path="AIPlayground.Console/AIPlayground.Console.csproj" />
+  <Project Path="AIPlayground.Datasource.API/AIPlayground.Datasource.API.csproj" Id="7ac735b4-31a0-4d27-a5d5-63d3e857aad2" />
   <Project Path="AIPlugins/AIPlugins.csproj" Id="bb230a4e-fe2a-4a83-8cfa-5811ace64d3f" />
 </Solution>

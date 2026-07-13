@@ -34,10 +34,32 @@ kernelBuilder.Services.AddHttpClient("WeatherForecast", (serviceProvider, client
     client.BaseAddress = new Uri("https://api.open-meteo.com/v1/forecast");    
 });
 
+kernelBuilder.Services.AddHttpClient("Customers", (serviceProvider, client) =>
+{
+    client.BaseAddress = new Uri("https://localhost:7098");
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return
+    new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+});
+
 
 
 
 var kernel = kernelBuilder.Build();
+
+var clientFactory = kernel.GetRequiredService<IHttpClientFactory>();
+var httpClient = clientFactory.CreateClient("Customers");
+
+//This is not on the kernel buiilder, but on the kernel itself
+await kernel.ImportPluginFromOpenApiAsync(pluginName: "customers", uri: new Uri("https://localhost:7098/openapi/v1.json"), executionParameters: new Microsoft.SemanticKernel.Plugins.OpenApi.OpenApiFunctionExecutionParameters() {IgnoreNonCompliantErrors =  true, HttpClient = httpClient });
+
+
+
 await StartPrompt(kernel);
 
 

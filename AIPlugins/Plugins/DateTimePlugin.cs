@@ -8,8 +8,8 @@ namespace AIPlugins.Plugins
         //Best practice: use snake case for function names
         //Shall be registered
         [KernelFunction("get_current_date_time")]
-        [Description("Get the current date and time.")]
-        public string GetCurrentDateTime() => DateTime.Now.ToString();
+        [Description("Get the current date and time in dd-MM-yyyy format.")]
+        public string GetCurrentDateTime() => DateTime.Now.ToString("dd-MM-yyyy");
 
         [KernelFunction("get_current_day_of_week")]
         [Description("Get the current day of the week.")]
