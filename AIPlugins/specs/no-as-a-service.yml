@@ -1,0 +1,26 @@
+﻿openapi: 3.1.0
+
+info:
+  title: No API
+  version: "1.0"
+
+servers:
+  - url: https://noasaservice.lol
+
+paths:
+  /api/get:
+    get:
+      operationId: getNo
+      summary: Returns a random negative answer.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - message
+                properties:
+                  message:
+                    type: string

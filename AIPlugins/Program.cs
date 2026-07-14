@@ -39,7 +39,7 @@ kernelBuilder.Plugins.AddFromType<WeatherForecastPlugin>();
 
 kernelBuilder.Services.AddHttpClient("WeatherForecast", (serviceProvider, client) =>
 {
-    client.BaseAddress = new Uri("https://api.open-meteo.com/v1/forecast");    
+    client.BaseAddress = new Uri("https://api.open-meteo.com/v1/forecast");
 });
 
 //kernelBuilder.Services.AddLogging(builder =>
@@ -79,27 +79,35 @@ var executionParameters = new OpenApiFunctionExecutionParameters()
     ServerUrlValidationOptions = new()
 };
 executionParameters.ServerUrlValidationOptions.AllowPrivateNetworkAccess = true;
+//executionParameters.ServerUrlValidationOptions.AllowedBaseUrls = { https://dogapi.dog/ };
 
 #pragma warning restore SKEXP0040 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
 
 //This is not on the kernel buiilder, but on the kernel itself
-await kernel.ImportPluginFromOpenApiAsync(
-    pluginName: "get_customers_info", 
-    uri: new Uri("https://localhost:7098/openapi/v1.json"),
-    executionParameters:executionParameters);
+//var customersPlugin = await kernel.ImportPluginFromOpenApiAsync(
+//                                 pluginName: "get_customers_info",
+//                                 uri: new Uri("https://localhost:7098/openapi/v1.json"),
+//                                 executionParameters: executionParameters);
 
 //new Microsoft.SemanticKernel.Plugins.OpenApi.OpenApiFunctionExecutionParameters() {IgnoreNonCompliantErrors =  true, HttpClient = httpClient }
 
 
-
+//Adding a NoAsAService by file containing open api specs. File generated with chat gpt from an example response
+var noAsAServicePlugin = await kernel.ImportPluginFromOpenApiAsync(
+                    pluginName: "no_as_a_service",
+                    filePath: "specs/no-as-a-service.yml");
 
 
 
 // Invoke explicitly a plugin and a function inside it to test
+//var result = await kernel.InvokeAsync(kernel.Plugins.GetFunction(
+//    pluginName:"get_customers_info",
+//    functionName: "GetAllCustomers"));
+
 var result = await kernel.InvokeAsync(kernel.Plugins.GetFunction(
-    pluginName:"get_customers_info",
-    functionName: "GetAllCustomers"));
+    pluginName: "no_as_a_service",
+    functionName: "getNo"));
 
 await StartPrompt(kernel);
 
