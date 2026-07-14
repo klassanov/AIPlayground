@@ -2,11 +2,13 @@
 using AIPlugins.Plugins;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Microsoft.SemanticKernel.Plugins.OpenApi;
 using OpenAI.Chat;
-using static System.Net.WebRequestMethods;
 
 
 var configuration = new ConfigurationBuilder()
@@ -20,11 +22,17 @@ var configuration = new ConfigurationBuilder()
 
 
 var kernelBuilder = Kernel.CreateBuilder();
+
 kernelBuilder.AddAzureOpenAIChatCompletion(
                            deploymentName: configuration["AzureOpenAI:ModelId"],
                            endpoint: configuration["AzureOpenAI:Endpoint"],
                            apiKey: configuration["AzureOpenAI:ApiKey"],
                            modelId: configuration["AzureOpenAI:ModelId"]);
+
+//kernelBuilder.AddOllamaChatCompletion(
+//                            modelId: configuration["Ollama:ModelId"],
+//                            endpoint: new Uri(configuration["Ollama:Endpoint"]));
+
 
 kernelBuilder.Plugins.AddFromType<DateTimePlugin>();
 kernelBuilder.Plugins.AddFromType<WeatherForecastPlugin>();
@@ -34,31 +42,64 @@ kernelBuilder.Services.AddHttpClient("WeatherForecast", (serviceProvider, client
     client.BaseAddress = new Uri("https://api.open-meteo.com/v1/forecast");    
 });
 
-kernelBuilder.Services.AddHttpClient("Customers", (serviceProvider, client) =>
-{
-    client.BaseAddress = new Uri("https://localhost:7098");
-})
-.ConfigurePrimaryHttpMessageHandler(() =>
-{
-    return
-    new HttpClientHandler
-    {
-        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-    };
-});
+//kernelBuilder.Services.AddLogging(builder =>
+//{
+//    builder
+//    .ClearProviders()
+//    .AddConsole()
+//    .SetMinimumLevel(LogLevel.Trace);
+//});
+
+//kernelBuilder.Services.AddHttpClient("Customers", (serviceProvider, client) =>
+//{
+//    client.BaseAddress = new Uri("https://localhost:7098");
+//})
+//.ConfigurePrimaryHttpMessageHandler(() =>
+//{
+//    return
+//    new HttpClientHandler
+//    {
+//        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+//    };
+//});
 
 
 
 
 var kernel = kernelBuilder.Build();
 
-var clientFactory = kernel.GetRequiredService<IHttpClientFactory>();
-var httpClient = clientFactory.CreateClient("Customers");
+//var clientFactory = kernel.GetRequiredService<IHttpClientFactory>();
+//var httpClient = clientFactory.CreateClient("Customers");
+
+//Disabled warning (treated as error) in order to be able to call the localhost (and maybe other APIs)
+#pragma warning disable SKEXP0040 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+var executionParameters = new OpenApiFunctionExecutionParameters()
+{
+    EnablePayloadNamespacing = true,
+    ServerUrlValidationOptions = new()
+};
+executionParameters.ServerUrlValidationOptions.AllowPrivateNetworkAccess = true;
+
+#pragma warning restore SKEXP0040 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+
 
 //This is not on the kernel buiilder, but on the kernel itself
-await kernel.ImportPluginFromOpenApiAsync(pluginName: "customers", uri: new Uri("https://localhost:7098/openapi/v1.json"), executionParameters: new Microsoft.SemanticKernel.Plugins.OpenApi.OpenApiFunctionExecutionParameters() {IgnoreNonCompliantErrors =  true, HttpClient = httpClient });
+await kernel.ImportPluginFromOpenApiAsync(
+    pluginName: "get_customers_info", 
+    uri: new Uri("https://localhost:7098/openapi/v1.json"),
+    executionParameters:executionParameters);
+
+//new Microsoft.SemanticKernel.Plugins.OpenApi.OpenApiFunctionExecutionParameters() {IgnoreNonCompliantErrors =  true, HttpClient = httpClient }
 
 
+
+
+
+
+// Invoke explicitly a plugin and a function inside it to test
+var result = await kernel.InvokeAsync(kernel.Plugins.GetFunction(
+    pluginName:"get_customers_info",
+    functionName: "GetAllCustomers"));
 
 await StartPrompt(kernel);
 
